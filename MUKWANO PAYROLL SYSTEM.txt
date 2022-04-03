@@ -1,0 +1,185 @@
+<?php
+
+
+ $nssf="";
+ $over_time_pay="";
+ $housing_allowance="";
+ $transport_allowance="";
+ $medical_allowance="";
+ $payeeTax="";
+ $gross_pay="";
+ $total_dedactions="";
+ $netpay="";
+ $gross_pay;$total_dedactions="";
+ $netpay="";
+ $showbasic="";
+ $showoverpay="";
+
+ //capturing the data submitted by the user into varriables to syore it for coming calculations
+if(isset($_POST['submit'])){
+ $employee_name=$_POST['names'];
+ $time_served=$_POST['timeserved'];
+ $basic_pay=$_POST['basicpay'];
+ $my_position=$_POST['position'];
+ $extra_hours=$_POST['extrahours'];
+
+//declaring varriables to store results of the calculations
+ $nssf;
+ $over_time_pay;
+ $housing_allowance; 
+ $transport_allowance;
+ $medical_allowance;
+ $payeeTax;
+ $gross_pay;
+ $total_dedactions;
+ $netpay;
+ $gross_pay;$total_dedactions;
+ $netpay;
+ $housing_allowance=0.08*$basic_pay;
+
+ $transport_allowance=0.05*$basic_pay;
+
+ $medical_allowance=0.06*$basic_pay;
+
+// calculating the payment for the extra hours worked
+ $over_time_pay = $extra_hours*30000;
+ $gross_pay = $basic_pay + $housing_allowance + $medical_allowance + $transport_allowance + $over_time_pay;
+
+
+ if($time_served>=5){
+    $gross_pay=$gross_pay+50000;}
+
+ else{
+    $gross_pay=$gross_pay;}
+
+//now working on payment based on the position
+    
+if($my_position=="manager"){
+    $gross_pay+=100000;}
+
+   else if ($my_position=="Technical_expert"){
+    $gross_pay+=50000;}
+
+   else{
+    $gross_pay=$gross_pay;}
+     $nssf = 0.15*$gross_pay;
+
+
+
+ //working on payee condition
+
+ if ($basic_pay <200000){
+    $payeeTax=0;}
+
+ else if($basic_pay>200000 && $basic_pay<=350000){
+    $payeeTax=0.1*($gross_pay-350000);}
+
+ else if ($basic_pay>350000 && $basic_pay<=500000){
+     $payeeTax=20000+0.2*($gross_pay-350000);}
+
+ else{
+    $payeeTax=60500+0.3*($gross_pay-350000);}
+
+ $total_dedactions = $nssf + $payeeTax;
+
+ $netpay=$gross_pay-$total_dedactions;
+
+//storing the $basic_pay printout in a varriable in order to print it any where in the program 
+ $showbasic="your are paid: . $basic_pay . shillings</br> </br>";
+
+ $hours="Worked extra:  . $extra_hours .  hrs</br> </br>";
+ 
+ $showoverpay ="Your extra time pay is:  . $over_time_pay . ' shillings</br> </br>";
+ 
+ 
+
+
+ 
+}
+?>
+
+
+<!DOCTYPE html>
+
+<head>
+  <title>
+    MUKWANO INDUSTRIES EMPLOYEE PAYROLL SYSTEM
+  </title>
+  <link rel="stylesheet" href="styles.css">
+  
+</head>
+<html>
+<body class="grey">
+   <div>
+
+   
+
+
+<form action="" method="POST" class="form">
+
+<h3 class="head">"MUKWANO INDUSTRIES EMPLOYEE PAYROLL SYSTEM"</h3>
+  <labele class="label">ENTER YOUR NAME:</label>
+  <input type="text" name="names" class="in">
+
+  <labele class="label">SELECT YOUR POSITION:</label>
+
+  <select  id="dish-selection" name="position"  required class="in">
+              <option value="" selected disabled>Select position </option>
+              <option value="Technical_expert" name="position">Technical_expert</option>
+              <option value="manager" name="position">Manager</option>
+              
+            </select>  
+ 
+            
+  <labele class="label">ENTER YOUR BASIC PAY:</label>
+  <input type="number" name="basicpay" class="in"> 
+
+  <labele class="label">FOR HOW LONG HAVE YOU SERVED:</label>
+  <input type="number" name="timeserved" class="in">  
+  
+  <labele= class="label" >ENTER EXTRA HOURS YOU WORKED:</label>
+  <input type="number" name="extrahours" class="in">
+
+  <br>
+  <input style="margin-left: 10px; width:130px; background-color: red;" type="reset" value="Reset"> 
+  
+   <input style="margin-left: 10px; width:130px; background-color: green;"  type="submit" name="submit" value= "Calculate" >
+
+
+ </form>
+
+ <h3> YOUR PAYMENT DETAILS</h3> 
+ <?php
+
+//printing out all the required computaions or calculations.
+
+ echo $showbasic;
+ echo $showoverpay;
+ echo 'your Gross pay is : ' .  $gross_pay . ' shillings</br> </br>';
+ 
+ echo 'Your housing allowance is: ' . $housing_allowance. ' shillings </br></br';
+ 
+ echo'Your transport allowance is: ' . $transport_allowance . ' shillings </br></br>';
+ 
+ echo'Your medical allowance is: ' . $medical_allowance . ' shillings </br> </br>';
+ 
+ echo'*********** DEDUCTIONS *************** </br></br>';
+ 
+ echo 'YOU ARE REQUIRED TO PAY ' . $nssf . ' shilling for NSSf </br> <br> <br>';
+ 
+ echo "Your netpay is " . $netpay . " shillings </br> <br><br>" ;
+
+ echo  "Total dedactions; ". $total_dedactions . " shillings</br>";
+ 
+
+?>
+</section>  
+
+
+</div>
+
+
+
+
+</body>
+</html>
